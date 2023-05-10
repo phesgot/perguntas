@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class Resposta extends StatelessWidget {
   const Resposta({
     Key? key,
-    this.onPressed,
+    this.quandoSelecionado,
     required this.texto,
   }) : super(key: key);
 
-  final Function? onPressed;
+  final void Function()? quandoSelecionado;
   final String texto;
 
   @override
@@ -15,7 +15,10 @@ class Resposta extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
-        onPressed: onPressed == null ? null : onPressed as void Function(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blueGrey,
+        ),
+        onPressed: quandoSelecionado == null ? null : quandoSelecionado as void Function(),
         child: Text(texto),
       ),
     );

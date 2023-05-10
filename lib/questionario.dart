@@ -7,12 +7,12 @@ class Questionario extends StatelessWidget {
       {Key? key,
       required this.perguntas,
       required this.perguntaSelecionada,
-      required this.responder})
+      required this.quandoResponder})
       : super(key: key);
 
-  final List perguntas;
+  final List<Map<String, Object>> perguntas;
   final int perguntaSelecionada;
-  final Function responder;
+  final void Function(int) quandoResponder;
 
   bool get temPerguntaSelecionada {
     return perguntaSelecionada < perguntas.length;
@@ -20,8 +20,9 @@ class Questionario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List respostas = temPerguntaSelecionada
+    List<Map<String, Object>> respostas = temPerguntaSelecionada
         ? perguntas[perguntaSelecionada].cast()['resposta']
+            as List<Map<String, Object>>
         : [];
 
     return SingleChildScrollView(
@@ -29,9 +30,12 @@ class Questionario extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Questao(texto: perguntas[perguntaSelecionada]['texto'].toString()),
-        ...respostas
-            .map((texto) => Resposta(texto: texto, onPressed: responder))
-            .toList(),
+        ...respostas.map((resposta) {
+          return Resposta(
+              texto: resposta['texto'].toString(),
+              quandoSelecionado: () =>
+                  quandoResponder(int.parse(resposta['pontuacao'].toString())));
+        }).toList(),
       ],
     ));
   }
